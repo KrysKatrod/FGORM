@@ -27,7 +27,8 @@ public class BDDActions {
 
 	private Connection connect() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		Connection con = DriverManager.getConnection("jdbc:mysql://mysql-oyashiro.alwaysdata.net/oyashiro_inscription", "oyashiro", "thepassword"); //mysql-oyashiro.alwaysdata.net
+		Credentials log = new Credentials();
+		Connection con = DriverManager.getConnection(log.getName(), log.getAcco(), log.getPass());
 		return con;		
 	}
 	
@@ -125,17 +126,17 @@ public class BDDActions {
 		return true;
 	}
 	
-private boolean checkPass (Connection con, int ID, String pass) throws SQLException {
-        
-        PreparedStatement ps = con.prepareStatement("SELECT PASS FROM JPAccount WHERE ID = ?");
-        ps.setInt(1, ID);        
-        ResultSet result = ps.executeQuery();
-        
-        
-        if (!result.next()) return addAccount(con, ID, pass);
-        if (pass.equals(result.getString("PASS"))) return true;
-        return false;
-    }
+	private boolean checkPass (Connection con, int ID, String pass) throws SQLException {
+		
+		PreparedStatement ps = con.prepareStatement("SELECT PASS FROM JPAccount WHERE ID = ?");
+		ps.setInt(1, ID);		
+		ResultSet result = ps.executeQuery();
+		
+		
+		if (!result.next()) return addAccount(con, ID, pass);
+		if (pass.equals(result.getString("PASS"))) return true;
+		return false;
+	}
 	
 	public boolean SendBD (int ID, File servList, String pass) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException, FileNotFoundException, IOException {
 		//System.out.println("Connexion en cours...");
